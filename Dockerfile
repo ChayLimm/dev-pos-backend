@@ -13,8 +13,10 @@ RUN composer install --no-interaction --prefer-dist --no-progress || true
 
 COPY . .
 
+# Fix storage permissions
+RUN mkdir -p storage/framework/{sessions,views,cache} && \
+    chmod -R 775 storage bootstrap/cache
+
 EXPOSE 8000
 
 CMD sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
-
-
