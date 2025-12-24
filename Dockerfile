@@ -13,9 +13,11 @@ RUN composer install --no-interaction --prefer-dist --no-progress || true
 
 COPY . .
 
+# Create storage dirs and set permissions once
 RUN mkdir -p storage/framework/{sessions,views,cache} && \
-    chmod -R 775 storage bootstrap/cache
+    chown -R www-data:www-data storage bootstrap/cache && \
+    chmod -R 777 storage bootstrap/cache
 
 EXPOSE 8000
 
-CMD ["sh", "-c", "chown -R www-data:www-data storage bootstrap/cache && chmod -R 775 storage bootstrap/cache && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
+CMD ["sh", "-c", "php artisan optimize:clear && php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"]
