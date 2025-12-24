@@ -11,10 +11,8 @@ WORKDIR /var/www/html
 COPY composer.json composer.lock* ./
 RUN composer install --no-interaction --prefer-dist --no-progress || true
 
-# Copy app code
 COPY . .
 
-# Run migrations (set APP_ENV for no interaction)
-RUN php artisan migrate --force --no-interaction
-
 EXPOSE 8000
+
+CMD sh -c "php artisan migrate --force && php artisan serve --host=0.0.0.0 --port=8000"
