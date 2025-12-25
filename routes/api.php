@@ -5,6 +5,16 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductController;
 use App\Http\Controllers\OrderController;
 
+
+// Handle preflight OPTIONS requests for all API routes
+Route::options('/{any}', function () {
+    return response()->json([], 200)
+        ->header('Access-Control-Allow-Origin', 'https://devops-project-production-7653.up.railway.app')
+        ->header('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE, OPTIONS')
+        ->header('Access-Control-Allow-Headers', 'Content-Type, Authorization, X-Requested-With, Accept');
+})->where('any', '.*');
+
+
 // Products
 Route::get('/products', [ProductController::class, 'index']);
 Route::post('/products', [ProductController::class, 'store']);
